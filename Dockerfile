@@ -37,8 +37,8 @@ RUN set -ex \
         curl \
         netcat \
         wget \
-        software-properties-common \
-        python-software-properties \
+        htop \
+        libmysqlclient-dev \
     && apt-get remove -yqq --no-install-recommends python-setuptools \
     && wget https://bootstrap.pypa.io/get-pip.py \
     && python get-pip.py \
@@ -51,6 +51,7 @@ RUN set -ex \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
+    && pip install mysql-python \
     && pip install airflow[crypto,celery,postgres,hive,hdfs,jdbc,slack]==$AIRFLOW_VERSION \
     && pip install celery[redis]==3.1.17 \
     && apt-get remove --purge -yqq $buildDeps \
@@ -64,17 +65,21 @@ RUN set -ex \
         /usr/share/doc-base \
     && apt-get autoremove -yqq
 
+
+RUN set -ex \
+    && apt-get update -yqq \
+    && apt-get install -yqq \
+       software-properties-common \
+       python-software-properties
+
 # Install Java 8
 RUN \
-    echo "===> Installing Java 8..."  \
-    && apt-get install -y python-software-properties debconf-i18n \
-    && add-apt-repository -y ppa:webupd8team/java \
-    && apt-get update \
-    && echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections \
-    && apt-get install -y oracle-java8-installer
-
-# Define commonly used JAVA_HOME variable
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+    add-apt-repository -y ppa:webupd8team/java && \
+    apt-get update && \
+    apt-get install -y oracle-java8-installer && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/oracle-jdk8-installer
 
 # Install Embulk
 RUN set -ex \
