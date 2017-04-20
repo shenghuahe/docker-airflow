@@ -38,6 +38,7 @@ RUN set -ex \
         netcat \
         wget \
         htop \
+        vim \
         libmysqlclient-dev \
     && apt-get remove -yqq --no-install-recommends python-setuptools \
     && wget https://bootstrap.pypa.io/get-pip.py \
