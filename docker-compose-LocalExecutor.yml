@@ -8,16 +8,15 @@ services:
             - POSTGRES_DB=airflow
 
     webserver:
-        image: puckel/docker-airflow
+        image: puckel/docker-airflow:1.8.0
         restart: always
         depends_on:
             - postgres
         environment:
             - LOAD_EX=y
             - EXECUTOR=Local
-        volumes:
-            - /Users/richardhe/MVF/REPOS/bi:/usr/local/airflow/bi
-            - /tmp/aw-reporting:/usr/local/data/aw-reporting
+        # volumes:
+            # - ~/github/docker-airflow/dags:/usr/local/airflow/dags
         ports:
             - "8080:8080"
         command: webserver
