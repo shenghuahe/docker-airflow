@@ -87,8 +87,10 @@ RUN set -ex \
   && curl --insecure --create-dirs -o /usr/local/bin/embulk -L "https://dl.embulk.org/embulk-latest.jar" \
   && chmod +x /usr/local/bin/embulk
 
-RUN embulk gem install embulk-input-mysql \
-    && embulk gem install embulk-output-redshift
+RUN su - airflow -c "embulk gem install embulk-input-mysql \
+    && embulk gem install embulk-output-redshift \
+    && embulk gem install embulk-input-s3 \
+    && embulk gem install embulk-output-s3"
 
 # Install psql client
 RUN set -ex \
