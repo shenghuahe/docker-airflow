@@ -90,7 +90,9 @@ RUN set -ex \
 RUN su - airflow -c "embulk gem install embulk-input-mysql \
     && embulk gem install embulk-output-redshift \
     && embulk gem install embulk-input-s3 \
-    && embulk gem install embulk-output-s3"
+    && embulk gem install embulk-output-s3 \
+    && embulk gem install embulk-filter-column \
+    "
 
 # Install psql client
 RUN set -ex \
