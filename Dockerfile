@@ -39,9 +39,10 @@ RUN set -ex \
         wget \
         htop \
         vim \
-        libmysqlclient-dev \
-    && apt-get remove -yqq --no-install-recommends python-setuptools \
-    && wget https://bootstrap.pypa.io/get-pip.py \
+        libmysqlclient-dev 
+    
+
+RUN wget https://bootstrap.pypa.io/get-pip.py \
     && python get-pip.py \
     && pip install -U pip setuptools \
     && useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
@@ -55,6 +56,9 @@ RUN set -ex \
     && pip install mysql-python \
     && pip install airflow[crypto,celery,postgres,hive,hdfs,jdbc,slack]==$AIRFLOW_VERSION \
     && pip install celery[redis]==3.1.17 \
+    && pip install statsd
+
+RUN apt-get remove -yqq --no-install-recommends python-setuptools \
     && apt-get remove --purge -yqq $buildDeps \
     && apt-get clean \
     && rm -rf \
@@ -66,12 +70,12 @@ RUN set -ex \
         /usr/share/doc-base \
     && apt-get autoremove -yqq
 
-
 RUN set -ex \
     && apt-get update -yqq \
     && apt-get install -yqq \
        software-properties-common \
        python-software-properties
+
 
 # Install Java 8
 RUN \
