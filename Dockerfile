@@ -103,6 +103,9 @@ RUN set -ex \
     && apt-get update -yqq \
     && apt-get install -yqq postgresql-client
 
+# Install PHP packages
+RUN apt-get -yqq install php5-cli php5-mysql
+
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
